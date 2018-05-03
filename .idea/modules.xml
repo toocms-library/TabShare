@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Share/Share.iml" filepath="$PROJECT_DIR$/Share/Share.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TooCMSAndroidShare.iml" filepath="$PROJECT_DIR$/TooCMSAndroidShare.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- APP标题文字颜色 -->
+    <color name="app_title_color">#060606</color>
+    <!-- APP副标题文字颜色 -->
+    <color name="app_subtitle_color">#868686</color>
+
+    <color name="action_bg">#21282C</color>
+    <color name="action_title_color">@android:color/white</color>
+    <color name="action_menu_color">@android:color/white</color>
+</resources>
