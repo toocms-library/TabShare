@@ -1,6 +1,6 @@
 package com.toocms.share.activity;
 
-import com.umeng.weixin.callback.WXCallbackActivity;
+import com.umeng.socialize.weixin.view.WXCallbackActivity;
 
 /**
  * Author：Zero
