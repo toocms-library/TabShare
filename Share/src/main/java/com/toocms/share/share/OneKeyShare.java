@@ -1,6 +1,7 @@
 package com.toocms.share.share;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -54,11 +55,17 @@ public class OneKeyShare implements AdapterView.OnItemClickListener {
     }
 
     public OneKeyShare setUrl(String url, String title, String desc, int resId) {
+        if (TextUtils.isEmpty(url) || !url.startsWith("http://"))
+            throw new ClassCastException("请设置正确的url");
         web = new UMWeb(url, title, desc, new UMImage(mActivity, resId));
         return this;
     }
 
     public OneKeyShare setUrl(String url, String title, String desc, String imageUrl) {
+        if (TextUtils.isEmpty(url) || !url.startsWith("http://"))
+            throw new ClassCastException("请设置正确的url");
+        if (TextUtils.isEmpty(imageUrl) || !imageUrl.startsWith("http://"))
+            throw new ClassCastException("请设置正确的imageUrl");
         web = new UMWeb(url, title, desc, new UMImage(mActivity, imageUrl));
         return this;
     }
