@@ -1,7 +1,6 @@
 package com.toocms.share.share;
 
 import android.app.Activity;
-import android.text.TextUtils;
 
 import com.toocms.share.listener.OnShareListener;
 import com.toocms.share.platform.ShareMedia;
@@ -43,17 +42,14 @@ public class SingleShare {
     }
 
     public SingleShare setUrl(String url, String title, String desc, int resId) {
-        if (TextUtils.isEmpty(url) || !url.startsWith("http://"))
-            throw new ClassCastException("请设置正确的url");
+        if (!TooCMSShareUtils.isUrl(url)) throw new ClassCastException("请设置正确的url");
         web = new UMWeb(url, title, desc, new UMImage(mActivity, resId));
         return this;
     }
 
     public SingleShare setUrl(String url, String title, String desc, String imageUrl) {
-        if (TextUtils.isEmpty(url) || !url.startsWith("http://"))
-            throw new ClassCastException("请设置正确的url");
-        if (TextUtils.isEmpty(imageUrl) || !imageUrl.startsWith("http://"))
-            throw new ClassCastException("请设置正确的imageUrl");
+        if (!TooCMSShareUtils.isUrl(url)) throw new ClassCastException("请设置正确的url");
+        if (!TooCMSShareUtils.isUrl(imageUrl)) throw new ClassCastException("请设置正确的imageUrl");
         web = new UMWeb(url, title, desc, new UMImage(mActivity, imageUrl));
         return this;
     }

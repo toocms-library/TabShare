@@ -1,13 +1,13 @@
 package com.toocms.share.share;
 
 import android.app.Activity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 
 import com.toocms.share.listener.OnShareListener;
 import com.toocms.share.platform.Platform;
 import com.toocms.share.platform.ShareMedia;
+import com.toocms.share.util.TooCMSShareUtils;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -55,17 +55,14 @@ public class OneKeyShare implements AdapterView.OnItemClickListener {
     }
 
     public OneKeyShare setUrl(String url, String title, String desc, int resId) {
-        if (TextUtils.isEmpty(url) || !url.startsWith("http://"))
-            throw new ClassCastException("请设置正确的url");
+        if (!TooCMSShareUtils.isUrl(url)) throw new ClassCastException("请设置正确的url");
         web = new UMWeb(url, title, desc, new UMImage(mActivity, resId));
         return this;
     }
 
     public OneKeyShare setUrl(String url, String title, String desc, String imageUrl) {
-        if (TextUtils.isEmpty(url) || !url.startsWith("http://"))
-            throw new ClassCastException("请设置正确的url");
-        if (TextUtils.isEmpty(imageUrl) || !imageUrl.startsWith("http://"))
-            throw new ClassCastException("请设置正确的imageUrl");
+        if (!TooCMSShareUtils.isUrl(url)) throw new ClassCastException("请设置正确的url");
+        if (!TooCMSShareUtils.isUrl(imageUrl)) throw new ClassCastException("请设置正确的imageUrl");
         web = new UMWeb(url, title, desc, new UMImage(mActivity, imageUrl));
         return this;
     }
