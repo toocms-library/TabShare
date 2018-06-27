@@ -3,6 +3,7 @@ package com.toocms.share.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.text.TextUtils;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.ViewConfiguration;
@@ -11,6 +12,8 @@ import com.toocms.share.platform.ShareMedia;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.lang.reflect.Field;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.umeng.socialize.bean.SHARE_MEDIA.MORE;
 import static com.umeng.socialize.bean.SHARE_MEDIA.QQ;
@@ -70,6 +73,18 @@ public class TooCMSShareUtils {
             }
         }
         return i;
+    }
+
+    /**
+     * 判断网址是否有效
+     */
+    public static boolean isUrl(String url) {
+        Pattern pattern = Pattern.compile("^(http://|https://)?((?:[A-Za-z0-9]+-[A-Za-z0-9]+|[A-Za-z0-9]+)\\.)+([A-Za-z]+)[/\\?\\:]?.*$", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(url);
+        if (matcher.matches()) {
+            return true;
+        }
+        return false;
     }
 
     public static int dpToPxInt(float dp) {
