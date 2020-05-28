@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Share/Share.iml" filepath="$PROJECT_DIR$/Share/Share.iml" />
-      <module fileurl="file://$PROJECT_DIR$/TooCMSAndroidShare.iml" filepath="$PROJECT_DIR$/TooCMSAndroidShare.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Share/Share.iml" filepath="$PROJECT_DIR$/Share/Share.iml" group="TabShare/Share" />
+      <module fileurl="file://$PROJECT_DIR$/TabShare.iml" filepath="$PROJECT_DIR$/TabShare.iml" group="TabShare" />
     </modules>
   </component>
 </project>
