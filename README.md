@@ -4,7 +4,7 @@
 
 # TabShare框架集成文档
 
-![Support](https://img.shields.io/badge/API-19+-4BC51D.svg)&#160;&#160;&#160;&#160;&#160;[![TAS Update](https://img.shields.io/badge/更新-记录-4BC51D.svg)](https://github.com/toocms-library/TabShare/releases)&#160;&#160;&#160;&#160;&#160;![Author](https://img.shields.io/badge/Author-Zero-4BC51D.svg)
+[![](https://jitpack.io/v/toocms-library/TabShare.svg)](https://jitpack.io/#toocms-library/TabShare)&#160;&#160;&#160;&#160;&#160;![Support](https://img.shields.io/badge/API-19+-4BC51D.svg)&#160;&#160;&#160;&#160;&#160;[![TAS Update](https://img.shields.io/badge/更新-记录-4BC51D.svg)](https://github.com/toocms-library/TabShare/releases)&#160;&#160;&#160;&#160;&#160;![Author](https://img.shields.io/badge/Author-Zero-4BC51D.svg)
 
 ## 添加Gradle依赖
 
@@ -12,7 +12,7 @@
 
 ```
 dependencies {
-    implementation 'com.github.toocms-library:TabShare:3.0.0.200528-alpha'
+    implementation 'com.github.toocms-library:TabShare:3.0.0.200706-beta'
 }
 ```
 
@@ -68,18 +68,12 @@ public void initJarForWeApplication(Application application) {
 
 ```
 /**
-* 分享插件
-*/
-private OneKeyShare oneKeyShare;
-
-/**
 * 调起分享
 *
 * @param share_media 分享到的平台（根据个数决定是否弹出分享面板，单个不弹出，多个弹出）
 */
 private void doShare(SHARE_MEDIA... share_media) {
-   if (oneKeyShare == null) oneKeyShare = new OneKeyShare(this);
-   oneKeyShare
+   TabShare.getOneKeyShare(this)
        // 设置要分享的平台列表，枚举类为SHARE_MEDIA，例如SHARE_MEDIA.QQ
        .setPlatform(share_media)
        // 设置要分享的url、标题、描述、图片（分享内容4选1）
@@ -130,9 +124,9 @@ doShare(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXI
 
 ```
 // 授权登录
-OneKeyLogin.showUser(this, true, share_media, onAuthListener);
+TabShare.getOneKeyLogin(this).showUser(this, true, share_media, onAuthListener);
 // 撤销授权
-OneKeyLogin.revokeAuthorize(this, share_media, onAuthListener);
+TabShare.getOneKeyLogin(this).revokeAuthorize(this, share_media, onAuthListener);
 ```
 
 - 注册授权登录/撤销授权监听
@@ -178,7 +172,7 @@ private OnAuthListener onAuthListener = new OnAuthListener() {
 - 判断平台是否已经授权
 
 ```
-OneKeyLogin.isAuthorize(this, share_media)
+TabShare.getOneKeyLogin(this).isAuthorize(this, share_media)
 ```
 
 - 添加回调代码
@@ -189,6 +183,16 @@ OneKeyLogin.isAuthorize(this, share_media)
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
    super.onActivityResult(requestCode, resultCode, data);
    UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+}
+```
+
+- 添加释放代码（重要，不添加会造成第二次分享/授权没有反应）
+
+```
+@Override
+protected void onDestroy() {
+   super.onDestroy();
+   TabShare.release(this);
 }
 ```
 
@@ -211,13 +215,13 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 - 调起自定义面板
 
 ```
-oneKeyShare = new OneKeyShare(this);
-oneKeyShare.setPlatform(share_media);
-oneKeyShare.addButton("复制链接", "copyurl", "umeng_socialize_copyurl", "umeng_socialize_copyurl");
-oneKeyShare.addButton("屏蔽", "delete", "umeng_socialize_delete", "umeng_socialize_delete");
-oneKeyShare.addButton("更多", "more", "umeng_socialize_more", "umeng_socialize_more");
-oneKeyShare.setShareboardclickCallback(shareBoardlistener);
-oneKeyShare.share();
+TabShare.getOneKeyShare(this)
+    .setPlatform(share_media)
+    .addButton("复制链接", "copyurl", "umeng_socialize_copyurl", "umeng_socialize_copyurl")
+    .addButton("屏蔽", "delete", "umeng_socialize_delete", "umeng_socialize_delete")
+    .addButton("更多", "more", "umeng_socialize_more", "umeng_socialize_more")
+    .setShareboardclickCallback(shareBoardlistener)
+    .share();
 ```
 
 - 注册自定义分享面板选项点击监听
@@ -245,4 +249,3 @@ private ShareBoardlistener shareBoardlistener = new ShareBoardlistener() {
     }
 };
 ```
-
