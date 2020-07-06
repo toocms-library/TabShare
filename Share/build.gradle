@@ -1,14 +1,14 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '29.0.2'
+    compileSdkVersion configs.compileSdkVersion
+    buildToolsVersion configs.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 29
-        versionCode 20200528
-        versionName "3.0.0.200528-alpha"
+        minSdkVersion configs.minSdkVersion
+        targetSdkVersion configs.targetSdkVersion
+        versionCode configs.versionCode
+        versionName configs.versionName
     }
     buildTypes {
         release {
@@ -20,5 +20,6 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.3.0-alpha01'
+    implementation "com.github.toocms-library:Tab:${configs.version_tab}"
+    implementation "androidx.appcompat:appcompat:${configs.version_appcompat}"
 }
