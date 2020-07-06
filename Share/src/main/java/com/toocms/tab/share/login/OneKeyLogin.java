@@ -18,6 +18,25 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
  */
 public class OneKeyLogin {
 
+    private volatile static OneKeyLogin instance;
+
+    private Activity activity;
+    private UMShareAPI umShareAPI;
+
+    private OneKeyLogin(Activity activity) {
+        this.activity = activity;
+        umShareAPI = UMShareAPI.get(activity);
+    }
+
+    public static OneKeyLogin getInstance(Activity activity) {
+        if (instance == null)
+            synchronized (OneKeyLogin.class) {
+                if (instance == null)
+                    instance = new OneKeyLogin(activity);
+            }
+        return instance;
+    }
+
     /**
      * 获取用户信息
      *
@@ -25,12 +44,11 @@ public class OneKeyLogin {
      * @param share_media 平台名称
      * @param listener    回调监听
      */
-    public static void showUser(Activity activity, boolean isNeedAuth, SHARE_MEDIA share_media, OnAuthListener listener) {
+    public void showUser(boolean isNeedAuth, SHARE_MEDIA share_media, OnAuthListener listener) {
         UMShareConfig config = new UMShareConfig();
         config.isNeedAuthOnGetUserInfo(isNeedAuth);
-        UMShareAPI api = UMShareAPI.get(activity);
-        api.setShareConfig(config);
-        api.getPlatformInfo(activity, share_media, listener);
+        umShareAPI.setShareConfig(config);
+        umShareAPI.getPlatformInfo(activity, share_media, listener);
     }
 
     /**
@@ -39,8 +57,8 @@ public class OneKeyLogin {
      * @param share_media
      * @param listener
      */
-    public static void revokeAuthorize(Activity activity, SHARE_MEDIA share_media, OnAuthListener listener) {
-        UMShareAPI.get(activity).deleteOauth(activity, share_media, listener);
+    public void revokeAuthorize(SHARE_MEDIA share_media, OnAuthListener listener) {
+        umShareAPI.deleteOauth(activity, share_media, listener);
     }
 
     /**
@@ -49,7 +67,14 @@ public class OneKeyLogin {
      * @param share_media
      * @return
      */
-    public static boolean isAuthorize(Activity activity, @NonNull SHARE_MEDIA share_media) {
-        return UMShareAPI.get(activity).isAuthorize(activity, share_media);
+    public boolean isAuthorize(@NonNull SHARE_MEDIA share_media) {
+        return umShareAPI.isAuthorize(activity, share_media);
+    }
+
+    /**
+     * 释放
+     */
+    public void release() {
+        instance = null;
     }
 }

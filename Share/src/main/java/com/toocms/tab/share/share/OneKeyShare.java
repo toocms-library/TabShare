@@ -5,7 +5,9 @@ import android.view.View;
 
 import com.toocms.tab.share.listener.OnShareListener;
 import com.toocms.tab.share.util.TooCMSShareUtils;
+import com.toocms.tab.toolkit.Toolkit;
 import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMMin;
@@ -26,13 +28,24 @@ import java.util.List;
  */
 public class OneKeyShare {
 
+    private volatile static OneKeyShare instance;
+
     private Activity mActivity;
     private ShareAction shareView;
     private List<SHARE_MEDIA> platforms;
 
-    public OneKeyShare(Activity activity) {
+    private OneKeyShare(Activity activity) {
         mActivity = activity;
-        shareView = new ShareAction(mActivity);
+        shareView = new ShareAction(activity);
+    }
+
+    public static OneKeyShare getInstance(Activity activity) {
+        if (instance == null)
+            synchronized (OneKeyShare.class) {
+                if (instance == null)
+                    instance = new OneKeyShare(activity);
+            }
+        return instance;
     }
 
     /**
@@ -65,7 +78,7 @@ public class OneKeyShare {
      * @return
      */
     public OneKeyShare setUrl(String url, String title, String desc, int resId) {
-        if (!TooCMSShareUtils.isUrl(url)) throw new ClassCastException("请设置正确的url");
+        if (!Toolkit.isUrl(url)) throw new ClassCastException("请设置正确的url");
         UMWeb web = new UMWeb(url, title, desc, new UMImage(mActivity, resId));
         shareView.withMedia(web);
         return this;
@@ -81,8 +94,8 @@ public class OneKeyShare {
      * @return
      */
     public OneKeyShare setUrl(String url, String title, String desc, String imageUrl) {
-        if (!TooCMSShareUtils.isUrl(url)) throw new ClassCastException("请设置正确的url");
-        if (!TooCMSShareUtils.isUrl(imageUrl)) throw new ClassCastException("请设置正确的imageUrl");
+        if (!Toolkit.isUrl(url)) throw new ClassCastException("请设置正确的url");
+        if (!Toolkit.isUrl(imageUrl)) throw new ClassCastException("请设置正确的imageUrl");
         UMWeb web = new UMWeb(url, title, desc, new UMImage(mActivity, imageUrl));
         shareView.withMedia(web);
         return this;
@@ -119,7 +132,7 @@ public class OneKeyShare {
      * @return
      */
     public OneKeyShare setImage(String imageUrl) {
-        if (!TooCMSShareUtils.isUrl(imageUrl)) throw new ClassCastException("请设置正确的imageUrl");
+        if (!Toolkit.isUrl(imageUrl)) throw new ClassCastException("请设置正确的imageUrl");
         UMImage image = new UMImage(mActivity, imageUrl);
         shareView.withMedia(image);
         return this;
@@ -162,7 +175,7 @@ public class OneKeyShare {
      * @return
      */
     public OneKeyShare setMin(String minUrl, String title, String desc, String path, String minId, int resId) {
-        if (!TooCMSShareUtils.isUrl(minUrl)) throw new ClassCastException("请设置正确的url");
+        if (!Toolkit.isUrl(minUrl)) throw new ClassCastException("请设置正确的url");
         UMImage image = new UMImage(mActivity, resId);
         UMMin min = new UMMin(minUrl);
         min.setTitle(title);
@@ -186,8 +199,8 @@ public class OneKeyShare {
      * @return
      */
     public OneKeyShare setMin(String minUrl, String title, String desc, String path, String minId, String imageUrl) {
-        if (!TooCMSShareUtils.isUrl(minUrl)) throw new ClassCastException("请设置正确的url");
-        if (!TooCMSShareUtils.isUrl(imageUrl)) throw new ClassCastException("请设置正确的imageUrl");
+        if (!Toolkit.isUrl(minUrl)) throw new ClassCastException("请设置正确的url");
+        if (!Toolkit.isUrl(imageUrl)) throw new ClassCastException("请设置正确的imageUrl");
         UMImage image = new UMImage(mActivity, imageUrl);
         UMMin min = new UMMin(minUrl);
         min.setTitle(title);
@@ -207,8 +220,9 @@ public class OneKeyShare {
      * @param icon
      * @param grayIcon
      */
-    public void addButton(String showWord, String mediaWord, String icon, String grayIcon) {
+    public OneKeyShare addButton(String showWord, String mediaWord, String icon, String grayIcon) {
         shareView.addButton(showWord, mediaWord, icon, grayIcon);
+        return this;
     }
 
     /**
@@ -216,8 +230,9 @@ public class OneKeyShare {
      *
      * @param listener
      */
-    public void setShareboardclickCallback(ShareBoardlistener listener) {
+    public OneKeyShare setShareboardclickCallback(ShareBoardlistener listener) {
         shareView.setShareboardclickCallback(listener);
+        return this;
     }
 
     /**
@@ -251,5 +266,12 @@ public class OneKeyShare {
                 }
                 break;
         }
+    }
+
+    /**
+     * 释放
+     */
+    public void release() {
+        instance = null;
     }
 }
