@@ -12,7 +12,7 @@
 
 ```
 dependencies {
-    implementation 'com.github.toocms-library:TabShare:3.0.0.200706-beta'
+    implementation 'com.github.toocms-library:TabShare:3.0.1'
 }
 ```
 
